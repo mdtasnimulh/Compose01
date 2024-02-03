@@ -2,4 +2,12 @@
 <resources>
 
     <style name="Theme.Compose01" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.CustomSplashScreenTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/android</item> <!--need to change the animated icon here-->
+        <item name="windowSplashScreenAnimationDuration">800</item>
+        <item name="postSplashScreenTheme">@style/Theme.Compose01</item>
+    </style>
+
 </resources>

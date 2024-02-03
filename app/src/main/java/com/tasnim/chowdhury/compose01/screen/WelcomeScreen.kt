@@ -24,18 +24,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
+import com.tasnim.chowdhury.compose01.navigation.Screen
 import com.tasnim.chowdhury.compose01.util.OnBoardingPage
+import com.tasnim.chowdhury.compose01.viewModel.OnBoardingViewModel
 
 @ExperimentalPagerApi
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @Composable
-fun WelcomeScreen(navController: NavHostController) {
+fun WelcomeScreen(
+    navController: NavHostController,
+    onBoardingViewModel: OnBoardingViewModel = hiltViewModel()
+) {
     val pages = listOf(
         OnBoardingPage.First,
         OnBoardingPage.Second,
@@ -44,7 +50,7 @@ fun WelcomeScreen(navController: NavHostController) {
 
     val pagerState = rememberPagerState()
 
-    Column (modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize()) {
         HorizontalPager(
             modifier = Modifier.weight(10f),
             count = 3,
@@ -55,9 +61,15 @@ fun WelcomeScreen(navController: NavHostController) {
         }
         HorizontalPagerIndicator(
             pagerState = pagerState,
-            modifier = Modifier.align(Alignment.CenterHorizontally).weight(1f)
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .weight(1f)
         )
-        FinishButton(modifier = Modifier.weight(1f), pagerState = pagerState) {}
+        FinishButton(modifier = Modifier.weight(1f), pagerState = pagerState) {
+            onBoardingViewModel.saveOnBoardingState(completed = true)
+            navController.popBackStack()
+            navController.navigate(Screen.Home.route)
+        }
     }
 }
 
@@ -105,11 +117,11 @@ fun FinishButton(
     pagerState: com.google.accompanist.pager.PagerState,
     onClick: () -> Unit
 ) {
-    Row (
+    Row(
         modifier = modifier.padding(horizontal = 40.dp),
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.Center
-    ){
+    ) {
         AnimatedVisibility(
             modifier = Modifier.fillMaxWidth(),
             visible = pagerState.currentPage == 2
@@ -124,10 +136,11 @@ fun FinishButton(
     }
 }
 
+/*
 @Composable
 @Preview(showBackground = true)
 fun FirstOnBoardingScreenPreview() {
-    Column (modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize()) {
         PagerScreen(onBoardingPage = OnBoardingPage.First)
     }
 }
@@ -135,7 +148,7 @@ fun FirstOnBoardingScreenPreview() {
 @Composable
 @Preview(showBackground = true)
 fun SecondOnBoardingScreenPreview() {
-    Column (modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize()) {
         PagerScreen(onBoardingPage = OnBoardingPage.Second)
     }
 }
@@ -143,7 +156,7 @@ fun SecondOnBoardingScreenPreview() {
 @Composable
 @Preview(showBackground = true)
 fun ThirdOnBoardingScreenPreview() {
-    Column (modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize()) {
         PagerScreen(onBoardingPage = OnBoardingPage.Third)
     }
-}
+}*/
